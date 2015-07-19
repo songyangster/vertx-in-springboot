@@ -26,6 +26,7 @@ public class Deployer extends AbstractVerticle {
 
     public static void main(String[] args) {
         ctx = SpringApplication.run(Deployer.class, args);
+        SpringApplicationContextHolder.setAppContext(ctx);
         Runner.runVertile(Deployer.class);
     }
 
@@ -42,7 +43,9 @@ public class Deployer extends AbstractVerticle {
 
     @Override
     public void start() throws Exception {
-        vertx.deployVerticle(serverFactory(), new DeploymentOptions());
+        for (int i=0; i<10; i++) {
+            vertx.deployVerticle(serverFactory(), new DeploymentOptions());
+        }
     }
 
     @RequestMapping("/")

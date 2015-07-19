@@ -17,6 +17,7 @@ public class Server extends AbstractVerticle {
 
     @Override
     public void start() throws Exception {
+        SpringApplicationContextHolder.autowireBean(this, "serverVerticle");
 
         HttpServer server = vertx.createHttpServer();
         Router router = router(vertx);
@@ -24,8 +25,10 @@ public class Server extends AbstractVerticle {
 
         // This handler will be called for every request
         router.route("/").handler(routingContext -> {
-            // dummyService is always null
-            //dummyService.dummyMethod();
+            System.out.println("Thread = " + Thread.currentThread().getName());
+
+            assert(dummyService != null);
+            dummyService.dummyMethod();
 
             HttpServerResponse response = routingContext.response();
             response.putHeader("content-type", "text/plain");

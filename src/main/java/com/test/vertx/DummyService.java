@@ -12,6 +12,7 @@ public class DummyService {
     }
 
     public String dummyMethod(){
+        System.out.println("DummyService.dummyMethod() called");
         return "Dummy String";
     }
 }
