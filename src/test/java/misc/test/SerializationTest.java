@@ -46,24 +46,4 @@ public class SerializationTest {
         Assert.assertEquals(foo, fooNew);
     }
 
-    public class Foo implements Serializable {
-        private String string;
-        private transient JsonNode jsonNode;
-
-        public Foo(String string, JsonNode jsonNode) {
-            this.string = string;
-            this.jsonNode = jsonNode;
-        }
-
-        private void writeObject(ObjectOutputStream out) throws IOException {
-            out.defaultWriteObject();
-            if (this.jsonNode != null) (new ObjectMapper()).writeValue(out, jsonNode);
-        }
-
-        private void readObject(ObjectInputStream in) throws IOException,ClassNotFoundException {
-            in.defaultReadObject();
-            this.jsonNode = (new ObjectMapper()).readValue(in, JsonNode.class);
-        }
-    }
-
 }
