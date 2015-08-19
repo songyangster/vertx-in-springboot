@@ -26,4 +26,23 @@ public class Foo implements Serializable {
         in.defaultReadObject();
         this.jsonNode = (new ObjectMapper()).readValue(in, JsonNode.class);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Foo)) return false;
+
+        Foo foo = (Foo) o;
+
+        if (string != null ? !string.equals(foo.string) : foo.string != null) return false;
+        return !(jsonNode != null ? !jsonNode.equals(foo.jsonNode) : foo.jsonNode != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = string != null ? string.hashCode() : 0;
+        result = 31 * result + (jsonNode != null ? jsonNode.hashCode() : 0);
+        return result;
+    }
 }
