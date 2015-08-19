@@ -11,7 +11,16 @@ public class SerializationTest {
     @Test
     public void testSerialization() {
         JsonNode node = (new ObjectMapper()).valueToTree("Test");
-        Foo foo = new Foo("Bar", node);
+
+        // This one successes
+        runTest(null);
+
+        // This on fails
+        runTest(node);
+    }
+
+    private void runTest(JsonNode jsonNode) {
+        Foo foo = new Foo("Bar", "s2", jsonNode);
 
         String fileName = "foo.ser";
         try (
