@@ -22,13 +22,21 @@ public class Foo implements Serializable {
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
         out.writeObject(s2);
-        if (this.jsonNode != null) (new ObjectMapper()).writeValue(out, jsonNode);
+//        if (this.jsonNode != null) (new ObjectMapper()).writeValue(out, jsonNode);
+
+        // Workaround for ObjectMapper.readValue() closing InputStream prematurely
+        String jsonString = (new ObjectMapper()).writeValueAsString(jsonNode);
+        out.writeObject(jsonString);
     }
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
         s2 = (String) in.readObject();
-        if (in.available()>0) this.jsonNode = (new ObjectMapper()).readValue(in, JsonNode.class);
+//        if (in.available() > 0) this.jsonNode = (new ObjectMapper()).readValue(in, JsonNode.class);
+
+        // Workaround for ObjectMapper.readValue() closing InputStream prematurely
+        String jsonString = (String) in.readObject();
+        jsonNode = (new ObjectMapper()).readTree(jsonString);
     }
 
     @Override
@@ -40,7 +48,7 @@ public class Foo implements Serializable {
 
         if (string != null ? !string.equals(foo.string) : foo.string != null) return false;
         if (s2 != null ? !s2.equals(foo.s2) : foo.s2 != null) return false;
-        return !(jsonNode != null ? !jsonNode.equals(foo.jsonNode) : foo.jsonNode != null);
+        return !(jsonNode != null && !jsonNode.isNull() ? !jsonNode.equals(foo.jsonNode) : foo.jsonNode != null && ! foo.jsonNode.isNull());
 
     }
 

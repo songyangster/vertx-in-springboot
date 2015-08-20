@@ -12,10 +12,10 @@ public class SerializationTest {
     public void testSerialization() {
         JsonNode node = (new ObjectMapper()).valueToTree("Test");
 
-        // This one successes
+        // This one succeeds with the commented part in Foo
         runTest(null);
 
-        // This on fails
+        // This on fails with the commented part
         runTest(node);
     }
 
